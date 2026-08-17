@@ -80,20 +80,58 @@
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+
+  /* iOS 홈 화면 앱에서 네이티브처럼 동작하게 하는 규칙들 */
+  html{
+    -webkit-text-size-adjust:100%;              /* 가로 전환 시 글자 크기 튀는 것 방지 */
+    overscroll-behavior-y:none;                 /* 당겨서 새로고침 / 고무줄 스크롤 방지 */
+  }
+  body{
+    -webkit-tap-highlight-color:transparent;    /* 탭할 때 회색 사각형 깜빡임 제거 */
+    overscroll-behavior-y:none;
+  }
+  /* 버튼·탭 등 조작 요소는 길게 눌러도 선택/확대 메뉴가 뜨지 않게 */
+  button, .tab-btn, .chip, .thumb, .hitrect, footer.tabbar, .dropzone, .meal-item, .split-opt, .legend{
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    user-select:none;
+    touch-action:manipulation;                  /* 더블탭 확대 방지 */
+  }
+  /* 글·숫자는 복사할 수 있어야 하므로 선택 허용 */
+  input, textarea, .hero .figure, .meal-total, .back-card, .dtable, .rnote, .note{
+    -webkit-user-select:text; user-select:text;
+  }
+  /* iOS는 입력 글꼴이 16px 미만이면 포커스 시 화면을 확대한다 — 터치 기기에서만 16px로 올림 */
+  @media (pointer: coarse){
+    .field input, .field select, .field textarea,
+    .date-nav input[type=date], #searchInput, #mealText, #wInput, #pasteBox{
+      font-size:16px;
+    }
+  }
   body{
     background:var(--page);
     color:var(--text-primary);
     font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     -webkit-font-smoothing:antialiased;
-    padding-bottom:56px;
+    padding-bottom:calc(60px + env(safe-area-inset-bottom));
   }
-  .wrap{ max-width:520px; margin:0 auto; padding:0 14px; }
+  .wrap{
+    max-width:520px; margin:0 auto;
+    padding:0 calc(14px + env(safe-area-inset-right)) 0 calc(14px + env(safe-area-inset-left));
+  }
 
   header.app{
     position:sticky; top:0; z-index:10;
     background:var(--page);
     padding:14px 0 8px;
     border-bottom:1px solid var(--border);
+  }
+  /* 홈 화면 앱으로 실행하면 상단에 브라우저 바가 없으므로 상태표시줄만큼 띄운다 */
+  @media (display-mode: standalone){
+    header.app{ padding-top:calc(14px + env(safe-area-inset-top)); }
+  }
+  @supports (-webkit-touch-callout: none){
+    body.standalone header.app{ padding-top:calc(14px + env(safe-area-inset-top)); }
   }
   header.app .row{ display:flex; align-items:center; justify-content:space-between; }
   header.app h1{ font-size:18px; margin:0; font-weight:700; }
@@ -209,9 +247,13 @@
   .entry .left{ display:flex; flex-direction:column; flex:1; min-width:0; }
   .entry .ename{ font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .entry .emeta{ font-size:11px; color:var(--text-muted); margin-top:2px; }
-  .entry .eright{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .entry .eright{ display:flex; align-items:center; gap:4px; flex-shrink:0; }
+  .entry .eright .fav-btn{ margin-left:6px; }
+  /* 삭제는 되돌릴 수 없으므로 별표와 충분히 띄우고 구분선을 둔다 */
+  .entry .eright .del-btn{ margin-left:8px; border-left:1px solid var(--grid); padding-left:6px; }
   .entry .ekcal{ font-size:13px; font-weight:700; color:var(--text-secondary); font-variant-numeric:tabular-nums; }
-  .del-btn{ border:none; background:transparent; color:var(--text-muted); font-size:16px; cursor:pointer; padding:4px; }
+  .del-btn{ border:none; background:transparent; color:var(--text-muted); font-size:16px; cursor:pointer;
+    min-width:40px; min-height:40px; display:flex; align-items:center; justify-content:center; }
 
   .empty{ text-align:center; color:var(--text-muted); font-size:13px; padding:18px 0; }
 
@@ -235,13 +277,59 @@
   .modal .hint{ font-size:11.5px; color:var(--text-muted); line-height:1.6; margin-bottom:10px; }
   .modal a{ color:var(--s-kcal); }
 
-  footer.tabbar{ position:fixed; bottom:0; left:0; right:0; background:var(--surface-1); border-top:1px solid var(--border); display:flex; z-index:20; }
-  footer.tabbar button{ flex:1; border:none; background:transparent; color:var(--text-muted); padding:9px 0 8px; font-size:11px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  footer.tabbar{
+    position:fixed; bottom:0; left:0; right:0; background:var(--surface-1);
+    border-top:1px solid var(--border); display:flex; z-index:20;
+    padding-bottom:env(safe-area-inset-bottom);   /* 홈 인디케이터와 겹치지 않게 */
+  }
+  footer.tabbar button{ flex:1; border:none; background:transparent; color:var(--text-muted); padding:9px 0 8px; font-size:11px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; min-height:48px; justify-content:center; }
   footer.tabbar button.active{ color:var(--s-kcal); font-weight:700; }
   footer.tabbar button .ic{ font-size:18px; }
 
   .view{ display:none; }
   .view.active{ display:block; }
+
+  /* 삭제 확인 대화상자 */
+  .confirm-backdrop{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .confirm-backdrop.show{ display:flex; }
+  .confirm-box{
+    background:var(--surface-1); border-radius:16px; padding:20px 18px 16px;
+    width:100%; max-width:330px; box-shadow:0 12px 40px rgba(0,0,0,.28);
+  }
+  .confirm-box h3{ margin:0 0 8px; font-size:16px; }
+  .confirm-box .cf-msg{ font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:6px; }
+  .confirm-box .cf-item{
+    font-size:13px; font-weight:700; color:var(--text-primary);
+    background:var(--page); border:1px solid var(--border); border-radius:9px;
+    padding:9px 11px; margin:8px 0 14px; word-break:break-all;
+  }
+  .confirm-box .cf-item small{ display:block; font-weight:600; color:var(--text-muted); font-size:11px; margin-top:2px; }
+  .confirm-actions{ display:flex; gap:8px; }
+  .confirm-actions button{
+    flex:1; padding:12px; border-radius:11px; font-size:14px; font-weight:700; cursor:pointer; min-height:46px;
+  }
+  .confirm-actions .cf-cancel{ border:1px solid var(--border); background:transparent; color:var(--text-primary); }
+  .confirm-actions .cf-ok{ border:none; background:var(--critical); color:#fff; }
+
+  /* iOS 안내 배너 */
+  .ios-bar{
+    display:none; margin:10px 0 0; padding:11px 13px; border-radius:12px;
+    background:var(--surface-1); border:1px solid var(--border);
+    font-size:12.5px; line-height:1.6; color:var(--text-secondary);
+  }
+  .ios-bar.show{ display:block; }
+  .ios-bar b{ color:var(--text-primary); }
+  .ios-bar .bar-x{
+    float:right; border:none; background:transparent; color:var(--text-muted);
+    font-size:15px; cursor:pointer; margin:-4px -4px 0 6px; min-width:32px; min-height:32px;
+  }
+  .ios-bar .bar-btn{
+    display:block; width:100%; margin-top:9px; padding:9px; border-radius:10px; border:none;
+    background:var(--s-kcal); color:#fff; font-size:13px; font-weight:700; cursor:pointer;
+  }
 
   /* weight */
   .weigh-row{ display:flex; align-items:center; gap:8px; }
@@ -310,7 +398,8 @@
   .chip .cname{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:170px; }
   .chip .cx{ border:none; background:transparent; color:var(--critical); font-size:13px; cursor:pointer; padding:0 0 0 2px; }
   .fav-hint{ font-size:11px; color:var(--text-muted); margin:7px 0 12px; }
-  .fav-btn{ border:none; background:transparent; font-size:15px; cursor:pointer; padding:4px; line-height:1; }
+  .fav-btn{ border:none; background:transparent; font-size:17px; cursor:pointer; line-height:1;
+    min-width:40px; min-height:40px; display:flex; align-items:center; justify-content:center; }
 
   /* stat tiles */
   .stat-row{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
@@ -414,6 +503,20 @@
       <button onclick="goToday()">오늘</button>
     </div>
   </header>
+
+  <div class="ios-bar" id="installBar">
+    <button class="bar-x" onclick="dismissBar('installBar','iosInstallDismissed')">✕</button>
+    <b>앱처럼 쓰시려면</b><br>
+    아래 공유 버튼 <b>⬆︎</b> → <b>홈 화면에 추가</b>를 누르세요.
+    홈 화면에서 실행하면 주소창 없이 열리고, 7일간 사용하지 않아도 기록이 지워지지 않습니다.
+  </div>
+
+  <div class="ios-bar" id="migrateBar">
+    <button class="bar-x" onclick="dismissBar('migrateBar','migrateDismissed')">✕</button>
+    <b>기록이 비어 있습니다.</b><br>
+    브라우저에서 쓰시던 기록이 있다면 옮겨오세요. 홈 화면 앱은 브라우저와 저장 공간이 분리되어 있어 자동으로 넘어오지 않습니다.
+    <button class="bar-btn" onclick="dismissBar('migrateBar','migrateDismissed'); openSettings();">설정 열어서 백업 가져오기</button>
+  </div>
 
   <!-- ============ TODAY VIEW ============ -->
   <div class="view active" id="view-today">
@@ -579,7 +682,7 @@
 
         <div id="selectedFoodBox" style="display:none;margin-top:10px;">
           <div class="grid2">
-            <div class="field"><label>인분 수</label><input type="number" id="servingMult" value="1" min="0.1" step="0.1" oninput="updateSelectedPreview()"></div>
+            <div class="field"><label>인분 수</label><input type="number" id="servingMult" value="1" min="0.1" step="0.1" inputmode="decimal" oninput="updateSelectedPreview()"></div>
             <div class="field"><label>선택된 음식</label><input type="text" id="selectedFoodName" disabled></div>
           </div>
           <div class="note" id="selectedPreview" style="margin-bottom:8px;"></div>
@@ -598,16 +701,16 @@
         </div>
         <div class="field"><label>음식/항목 이름</label><input type="text" id="m-name" placeholder="예: 닭가슴살 샐러드"></div>
         <div class="grid3">
-          <div class="field"><label>칼로리 (kcal)</label><input type="number" id="m-kcal" min="0"></div>
-          <div class="field"><label>탄수화물 (g)</label><input type="number" id="m-carb" min="0"></div>
-          <div class="field"><label>단백질 (g)</label><input type="number" id="m-protein" min="0"></div>
+          <div class="field"><label>칼로리 (kcal)</label><input type="number" id="m-kcal" min="0" inputmode="decimal"></div>
+          <div class="field"><label>탄수화물 (g)</label><input type="number" id="m-carb" min="0" inputmode="decimal"></div>
+          <div class="field"><label>단백질 (g)</label><input type="number" id="m-protein" min="0" inputmode="decimal"></div>
         </div>
         <div class="grid3">
-          <div class="field"><label>지방 (g)</label><input type="number" id="m-fat" min="0"></div>
-          <div class="field"><label>식이섬유 (g)</label><input type="number" id="m-fiber" min="0"></div>
-          <div class="field"><label>나트륨 (mg)</label><input type="number" id="m-sodium" min="0"></div>
+          <div class="field"><label>지방 (g)</label><input type="number" id="m-fat" min="0" inputmode="decimal"></div>
+          <div class="field"><label>식이섬유 (g)</label><input type="number" id="m-fiber" min="0" inputmode="decimal"></div>
+          <div class="field"><label>나트륨 (mg)</label><input type="number" id="m-sodium" min="0" inputmode="decimal"></div>
         </div>
-        <div class="field"><label>수분 (ml)</label><input type="number" id="m-water" min="0"></div>
+        <div class="field"><label>수분 (ml)</label><input type="number" id="m-water" min="0" inputmode="decimal"></div>
         <button class="btn-primary" onclick="addManual()">기록에 추가</button>
       </div>
     </section>
@@ -631,7 +734,7 @@
     <section class="card">
       <h2 class="section-title">오늘 체중</h2>
       <div class="weigh-row">
-        <input type="number" id="wInput" step="0.1" min="20" max="300" placeholder="예: 62.4">
+        <input type="number" id="wInput" step="0.1" min="20" max="300" inputmode="decimal" placeholder="예: 62.4">
         <span class="wunit">kg</span>
         <button class="btn-primary" style="width:auto;padding:11px 18px;margin:0;" onclick="saveWeight()">저장</button>
       </div>
@@ -749,9 +852,9 @@
       <div class="field"><label>성별</label>
         <select id="p-sex"><option value="female">여성</option><option value="male">남성</option></select>
       </div>
-      <div class="field"><label>나이 (만)</label><input type="number" id="p-age" min="10" max="120"></div>
-      <div class="field"><label>키 (cm)</label><input type="number" id="p-height" step="0.1" min="100" max="230"></div>
-      <div class="field"><label>현재 체중 (kg)</label><input type="number" id="p-weight" step="0.1" min="20" max="300"></div>
+      <div class="field"><label>나이 (만)</label><input type="number" id="p-age" min="10" max="120" inputmode="decimal"></div>
+      <div class="field"><label>키 (cm)</label><input type="number" id="p-height" step="0.1" min="100" max="230" inputmode="decimal"></div>
+      <div class="field"><label>현재 체중 (kg)</label><input type="number" id="p-weight" step="0.1" min="20" max="300" inputmode="decimal"></div>
     </div>
     <div class="field"><label>활동량</label>
       <select id="p-activity">
@@ -787,13 +890,13 @@
       성별·연령·활동량·건강상태에 따라 실제 필요량은 달라지므로 필요시 조정하세요.
     </div>
     <div class="grid2">
-      <div class="field"><label>칼로리 (kcal)</label><input type="number" id="t-kcal"></div>
-      <div class="field"><label>탄수화물 (g)</label><input type="number" id="t-carb"></div>
-      <div class="field"><label>단백질 (g)</label><input type="number" id="t-protein"></div>
-      <div class="field"><label>지방 (g)</label><input type="number" id="t-fat"></div>
-      <div class="field"><label>식이섬유 (g)</label><input type="number" id="t-fiber"></div>
-      <div class="field"><label>나트륨 상한 (mg)</label><input type="number" id="t-sodium"></div>
-      <div class="field"><label>수분 (ml)</label><input type="number" id="t-water"></div>
+      <div class="field"><label>칼로리 (kcal)</label><input type="number" id="t-kcal" inputmode="decimal"></div>
+      <div class="field"><label>탄수화물 (g)</label><input type="number" id="t-carb" inputmode="decimal"></div>
+      <div class="field"><label>단백질 (g)</label><input type="number" id="t-protein" inputmode="decimal"></div>
+      <div class="field"><label>지방 (g)</label><input type="number" id="t-fat" inputmode="decimal"></div>
+      <div class="field"><label>식이섬유 (g)</label><input type="number" id="t-fiber" inputmode="decimal"></div>
+      <div class="field"><label>나트륨 상한 (mg)</label><input type="number" id="t-sodium" inputmode="decimal"></div>
+      <div class="field"><label>수분 (ml)</label><input type="number" id="t-water" inputmode="decimal"></div>
     </div>
     <h4>데이터 백업 / 이전</h4>
     <div class="hint">
@@ -810,6 +913,18 @@
 
     <button class="btn-primary" onclick="saveSettings()">저장</button>
     <button class="btn-secondary" onclick="closeSettings()">닫기</button>
+  </div>
+</div>
+
+<div class="confirm-backdrop" id="confirmBox">
+  <div class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="cfTitle">
+    <h3 id="cfTitle">삭제할까요?</h3>
+    <div class="cf-msg" id="cfMsg"></div>
+    <div class="cf-item" id="cfItem"></div>
+    <div class="confirm-actions">
+      <button class="cf-cancel" onclick="closeConfirm()">취소</button>
+      <button class="cf-ok" id="cfOk">삭제</button>
+    </div>
   </div>
 </div>
 
@@ -1108,9 +1223,19 @@ function quickAddFavorite(i){
 }
 
 function removeFavorite(i){
-  state.favorites.splice(i,1);
-  saveData();
-  renderFavorites();
+  const f = (state.favorites||[])[i];
+  if(!f) return;
+  askConfirm({
+    title: '즐겨찾기에서 뺄까요?',
+    message: '이미 기록한 내용은 그대로 남고, 목록에서만 사라집니다.',
+    itemHtml: `${escapeHtml(f.name)}<small>${Math.round(num(f.kcal))} kcal</small>`,
+    okLabel: '빼기',
+    onConfirm: ()=>{
+      state.favorites.splice(i,1);
+      saveData();
+      renderFavorites();
+    }
+  });
 }
 
 function isFavorited(e){ return (state.favorites || []).some(f=>sameFood(f,e)); }
@@ -2405,16 +2530,60 @@ function renderTrendTable(days){
 
 /* ---------------- Entries ---------------- */
 function addEntry(entry){
+  const mb = document.getElementById('migrateBar');
+  if(mb) mb.classList.remove('show');
   if(!state.days[currentDate]) state.days[currentDate] = [];
   entry.time = new Date().toISOString();
   state.days[currentDate].push(entry);
   saveData();
   render();
 }
+/* ---------------- 삭제 확인 ---------------- */
+let _confirmAction = null;
+
+function askConfirm({ title, message, itemHtml, okLabel, onConfirm }){
+  document.getElementById('cfTitle').textContent = title || '삭제할까요?';
+  document.getElementById('cfMsg').textContent = message || '이 작업은 되돌릴 수 없습니다.';
+  const itemEl = document.getElementById('cfItem');
+  itemEl.innerHTML = itemHtml || '';
+  itemEl.style.display = itemHtml ? 'block' : 'none';
+  document.getElementById('cfOk').textContent = okLabel || '삭제';
+  _confirmAction = onConfirm;
+  document.getElementById('confirmBox').classList.add('show');
+}
+
+function closeConfirm(){
+  document.getElementById('confirmBox').classList.remove('show');
+  _confirmAction = null;
+}
+
+document.getElementById('cfOk').addEventListener('click', ()=>{
+  const fn = _confirmAction;
+  closeConfirm();
+  if(typeof fn === 'function') fn();
+});
+// 배경(카드 바깥)을 누르면 취소 — 실수로 삭제되지 않도록 기본 동작은 항상 '취소'
+document.getElementById('confirmBox').addEventListener('click', e=>{
+  if(e.target.id === 'confirmBox') closeConfirm();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape' && document.getElementById('confirmBox').classList.contains('show')) closeConfirm();
+});
+
 function deleteEntry(i){
-  state.days[currentDate].splice(i,1);
-  saveData();
-  render();
+  const e = getDayEntries(currentDate)[i];
+  if(!e) return;
+  askConfirm({
+    title: '이 기록을 삭제할까요?',
+    message: '삭제하면 되돌릴 수 없습니다.',
+    itemHtml: `${escapeHtml(e.name)}<small>${Math.round(num(e.kcal))} kcal · 탄 ${round1(e.carb)}g · 단 ${round1(e.protein)}g · 지 ${round1(e.fat)}g</small>`,
+    okLabel: '삭제',
+    onConfirm: ()=>{
+      state.days[currentDate].splice(i,1);
+      saveData();
+      render();
+    }
+  });
 }
 
 /* ---------------- Settings ---------------- */
@@ -2568,8 +2737,51 @@ function saveSettings(){
   render();
 }
 
+/* ---------------- iOS 홈 화면 앱 대응 ---------------- */
+function isStandalone(){
+  return window.navigator.standalone === true ||
+         (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+}
+function isIOS(){
+  const ua = navigator.userAgent || '';
+  // iPadOS 13+ 는 데스크톱 Safari로 위장하므로 터치 지원 여부로 함께 판별한다
+  return /iPad|iPhone|iPod/.test(ua) ||
+         (/Macintosh/.test(ua) && typeof document.ontouchend !== 'undefined');
+}
+
+function dismissBar(id, key){
+  document.getElementById(id).classList.remove('show');
+  try{ localStorage.setItem(key, '1'); }catch(e){}
+}
+
+function setupPlatform(){
+  const standalone = isStandalone();
+  if(standalone) document.body.classList.add('standalone');
+
+  // 브라우저로 열었고 아직 홈 화면에 추가하지 않은 iOS 사용자에게만 설치 안내
+  const installDone = (()=>{ try{ return localStorage.getItem('iosInstallDismissed')==='1'; }catch(e){ return false; } })();
+  if(isIOS() && !standalone && !installDone){
+    document.getElementById('installBar').classList.add('show');
+  }
+
+  // 홈 화면 앱인데 데이터가 하나도 없으면 백업 가져오기를 안내 (저장소 분리 때문에 흔한 상황)
+  const migrateDone = (()=>{ try{ return localStorage.getItem('migrateDismissed')==='1'; }catch(e){ return false; } })();
+  const empty = Object.keys(state.days).length === 0 && Object.keys(state.weights).length === 0;
+  if(standalone && empty && !migrateDone){
+    document.getElementById('migrateBar').classList.add('show');
+  }
+
+  // 브라우저가 저장 공간을 임의로 비우지 않도록 요청 (지원하지 않는 환경에서는 무시됨)
+  if(navigator.storage && navigator.storage.persist){
+    navigator.storage.persisted().then(already=>{
+      if(!already) navigator.storage.persist().catch(()=>{});
+    }).catch(()=>{});
+  }
+}
+
 /* init */
 render();
+setupPlatform();
 </script>
 </body>
 </html>
