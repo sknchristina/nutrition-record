@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>오늘의 영양 기록</title>
-<meta name="description" content="하루 섭취 칼로리와 탄수화물·단백질·지방·식이섬유·수분을 기록하는 개인용 앱">
+<meta name="description" content="하루 섭취 칼로리와 탄수화물·단백질·지방·식이섬유·나트륨·수분을 기록하는 개인용 앱">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#2a78d6">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,6 +31,7 @@
     --s-protein:      #1baf7a;
     --s-fat:          #eda100;
     --s-fiber:        #e87ba4;
+    --s-sodium:       #008300;
     --s-water:        #4a3aa7;
     --radius: 14px;
   }
@@ -52,6 +53,7 @@
       --s-protein:      #199e70;
       --s-fat:          #c98500;
       --s-fiber:        #d55181;
+      --s-sodium:       #008300;
       --s-water:        #9085e9;
     }
   }
@@ -72,6 +74,7 @@
     --s-protein:      #199e70;
     --s-fat:          #c98500;
     --s-fiber:        #d55181;
+    --s-sodium:       #008300;
     --s-water:        #9085e9;
   }
 
@@ -240,6 +243,60 @@
   .view{ display:none; }
   .view.active{ display:block; }
 
+  /* weight */
+  .weigh-row{ display:flex; align-items:center; gap:8px; }
+  .weigh-row input{
+    flex:1; padding:11px 12px; border-radius:11px; border:1px solid var(--border);
+    background:var(--page); color:var(--text-primary); font-size:19px; font-weight:700; text-align:right;
+  }
+  .weigh-row .wunit{ font-size:13px; color:var(--text-secondary); font-weight:600; }
+  .calc-out{
+    margin-top:10px; padding:12px; border-radius:11px; background:var(--page); border:1px solid var(--border); font-size:12.5px;
+  }
+  .calc-out .co-row{ display:flex; justify-content:space-between; padding:3px 0; }
+  .calc-out .co-row .cv{ font-weight:700; font-variant-numeric:tabular-nums; }
+  .calc-out .co-main{ font-size:16px; font-weight:800; margin:8px 0 2px; }
+  .calc-out .co-warn{ color:var(--critical); font-weight:600; margin-top:8px; line-height:1.5; }
+  .calc-out .co-note{ color:var(--text-muted); margin-top:8px; line-height:1.5; }
+  .back-card{ font-size:12.5px; line-height:1.6; }
+  .back-card .bc-main{ font-size:15px; font-weight:800; margin:2px 0 6px; }
+  .back-card .bc-row{ display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid var(--grid); }
+  .back-card .bc-row:last-of-type{ border-bottom:none; }
+  .back-card .bc-row .v{ font-weight:700; font-variant-numeric:tabular-nums; }
+  .back-card .bc-note{ color:var(--text-secondary); margin-top:9px; padding-top:9px; border-top:1px solid var(--grid); }
+
+  /* meal (free text) */
+  .meal-item{
+    display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid var(--grid); font-size:13px;
+  }
+  .meal-item:last-of-type{ border-bottom:none; }
+  .meal-item input[type=checkbox]{ width:18px; height:18px; accent-color:var(--s-kcal); flex-shrink:0; }
+  .meal-item .mi-main{ flex:1; min-width:0; }
+  .meal-item .mi-name{ font-weight:600; }
+  .meal-item .mi-amt{ font-size:11px; color:var(--text-muted); margin-top:1px; }
+  .meal-item .mi-kcal{ font-weight:700; font-variant-numeric:tabular-nums; color:var(--text-secondary); flex-shrink:0; }
+  .meal-item.off{ opacity:.4; }
+  .meal-total{
+    margin-top:10px; padding:11px; border-radius:11px; background:var(--page); border:1px solid var(--border);
+  }
+  .meal-total .mt-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+  .meal-total .mt-head .mt-l{ font-size:12.5px; font-weight:700; }
+  .meal-total .mt-head .mt-v{ font-size:20px; font-weight:800; }
+  .meal-total .mt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3px 12px; }
+  .meal-total .mt-row{ display:flex; justify-content:space-between; font-size:12.5px; }
+  .meal-total .mt-row .k{ display:flex; align-items:center; gap:5px; color:var(--text-secondary); }
+  .meal-total .mt-row .k .dot{ width:7px; height:7px; border-radius:50%; }
+  .meal-total .mt-row .v{ font-weight:700; font-variant-numeric:tabular-nums; }
+  .salt-flag{
+    display:flex; align-items:center; gap:6px; margin-top:9px; padding:8px 10px; border-radius:9px;
+    font-size:11.5px; line-height:1.5; border:1px solid var(--border);
+  }
+  .salt-flag.high{ color:var(--critical); }
+  .salt-flag.medium{ color:var(--text-secondary); }
+  .salt-flag.low{ color:var(--good); }
+  .split-opt{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-secondary); margin:12px 0 6px; cursor:pointer; }
+  .split-opt input{ width:17px; height:17px; accent-color:var(--s-kcal); }
+
   /* favorites */
   .fav-head{ display:flex; align-items:center; justify-content:space-between; font-size:12.5px; font-weight:700; color:var(--text-secondary); margin-bottom:7px; }
   .chips{ display:flex; flex-wrap:wrap; gap:6px; }
@@ -346,7 +403,7 @@
     <div class="row">
       <div>
         <h1>오늘의 영양 기록</h1>
-        <div class="sub">칼로리 · 탄수화물 · 단백질 · 지방 · 식이섬유 · 수분</div>
+        <div class="sub">칼로리 · 탄단지 · 식이섬유 · 나트륨 · 수분</div>
       </div>
       <button class="icon-btn" onclick="openSettings()">⚙️</button>
     </div>
@@ -387,6 +444,10 @@
         <div class="ntrack"><div class="fill" id="fill-fiber" style="background:var(--s-fiber);width:0%"></div></div>
       </div>
       <div class="nrow">
+        <div class="label-line"><span class="name"><span class="dot" style="background:var(--s-sodium)"></span>나트륨</span><span class="val" id="val-sodium">0 / 0 mg</span></div>
+        <div class="ntrack"><div class="fill" id="fill-sodium" style="background:var(--s-sodium);width:0%"></div></div>
+      </div>
+      <div class="nrow">
         <div class="label-line"><span class="name"><span class="dot" style="background:var(--s-water)"></span>수분</span><span class="val" id="val-water">0 / 0 ml</span></div>
         <div class="ntrack"><div class="fill" id="fill-water" style="background:var(--s-water);width:0%"></div></div>
       </div>
@@ -395,6 +456,7 @@
         <span class="item"><span class="dot" style="background:var(--s-protein)"></span>단백질</span>
         <span class="item"><span class="dot" style="background:var(--s-fat)"></span>지방</span>
         <span class="item"><span class="dot" style="background:var(--s-fiber)"></span>식이섬유</span>
+        <span class="item"><span class="dot" style="background:var(--s-sodium)"></span>나트륨</span>
         <span class="item"><span class="dot" style="background:var(--s-water)"></span>수분</span>
       </div>
     </section>
@@ -402,13 +464,51 @@
     <section class="card">
       <h2 class="section-title">기록 추가</h2>
       <div class="tabs">
-        <button class="tab-btn active" id="tabPhotoBtn" onclick="switchTab('photo')">🖼️ 사진</button>
-        <button class="tab-btn" id="tabSearchBtn" onclick="switchTab('search')">빠른 검색</button>
-        <button class="tab-btn" id="tabManualBtn" onclick="switchTab('manual')">직접 입력</button>
+        <button class="tab-btn active" id="tabMealBtn" onclick="switchTab('meal')">✍️ 문장</button>
+        <button class="tab-btn" id="tabPhotoBtn" onclick="switchTab('photo')">🖼️ 사진</button>
+        <button class="tab-btn" id="tabSearchBtn" onclick="switchTab('search')">🔍 검색</button>
+        <button class="tab-btn" id="tabManualBtn" onclick="switchTab('manual')">⌨️ 직접</button>
+      </div>
+
+      <!-- ---- MEAL (free text) TAB ---- -->
+      <div id="tabMeal">
+        <div id="mealNoKey" style="display:none;">
+          <div class="note" style="border-color:var(--warning);">
+            <b>문장 입력은 AI 계산이 필요합니다.</b> ⚙️ 설정에서 API 키를 등록해주세요.
+          </div>
+        </div>
+        <div id="mealUI">
+          <div class="field">
+            <label>먹은 것을 편하게 적어주세요 — 양은 대략이어도 됩니다</label>
+            <textarea id="mealText" rows="5" placeholder="예)
+오곡찰밥 2/3공기, 소고기우거지국 2/3인분
+소고기육전 1개, 깻잎소고기전 1개
+깻잎나물 5젓가락, 진미채 3젓가락, 두부전 1조각"></textarea>
+          </div>
+          <button class="btn-primary" id="mealCalcBtn" onclick="calcMeal()">🤖 항목별로 계산하기</button>
+          <div class="status-line" id="mealStatus"></div>
+
+          <div id="mealResult" style="display:none;">
+            <div class="fav-head" style="margin:14px 0 6px;">
+              <span id="mealTitle">섭취량 요약</span>
+              <button class="link-btn" onclick="recalcMeal()">합계 다시 계산</button>
+            </div>
+            <div id="mealItems"></div>
+            <div class="meal-total" id="mealTotal"></div>
+            <div class="rnote" id="mealNote"></div>
+            <div class="rwarn" id="mealWarn" style="display:none;"></div>
+            <label class="split-opt">
+              <input type="checkbox" id="mealSplit"> 한 항목으로 합치지 말고 <b>음식별로 따로</b> 기록하기
+            </label>
+            <button class="btn-primary" onclick="addMealToLog()">기록에 추가</button>
+            <button class="btn-secondary" onclick="saveMealAsFavorite()">⭐ 이 한 상 즐겨찾기에 저장</button>
+            <button class="btn-secondary" onclick="clearMeal()">지우기</button>
+          </div>
+        </div>
       </div>
 
       <!-- ---- PHOTO TAB ---- -->
-      <div id="tabPhoto">
+      <div id="tabPhoto" style="display:none;">
         <div id="noKeyNotice" style="display:none;">
           <div class="note" style="border-color:var(--warning);">
             <b>사진 자동 인식을 쓰려면 API 키 설정이 필요합니다.</b><br>
@@ -505,8 +605,9 @@
         <div class="grid3">
           <div class="field"><label>지방 (g)</label><input type="number" id="m-fat" min="0"></div>
           <div class="field"><label>식이섬유 (g)</label><input type="number" id="m-fiber" min="0"></div>
-          <div class="field"><label>수분 (ml)</label><input type="number" id="m-water" min="0"></div>
+          <div class="field"><label>나트륨 (mg)</label><input type="number" id="m-sodium" min="0"></div>
         </div>
+        <div class="field"><label>수분 (ml)</label><input type="number" id="m-water" min="0"></div>
         <button class="btn-primary" onclick="addManual()">기록에 추가</button>
       </div>
     </section>
@@ -519,10 +620,44 @@
     <section class="note">
       💡 <b>정확도 안내:</b> 영양성분표(라벨)를 찍은 사진은 표에 적힌 값을 그대로 읽으므로 정확합니다(<span style="color:var(--good);font-weight:700">라벨</span> 배지).
       조리된 음식 사진은 양·조리법을 눈으로 추정하는 것이라 오차가 큽니다(<span style="color:var(--warning);font-weight:700">추정</span> 배지) — 참고값으로만 쓰시고, 정확한 관리가 필요하면 라벨 사진이나 직접 입력을 권합니다.
-      수분은 라벨에 표기 의무가 없어 대부분 추정값입니다.
+      수분과 나트륨은 라벨에 없으면 추정값입니다. 특히 한식은 간에 따라 나트륨 편차가 크므로 참고 수준으로 보세요.
       사진은 앱에 저장되지 않고 분석에만 사용되며, 사진 1장당 API 호출 1회가 발생합니다(한 번에 최대 10장).
     </section>
 
+  </div>
+
+  <!-- ============ BODY / WEIGHT VIEW ============ -->
+  <div class="view" id="view-body">
+    <section class="card">
+      <h2 class="section-title">오늘 체중</h2>
+      <div class="weigh-row">
+        <input type="number" id="wInput" step="0.1" min="20" max="300" placeholder="예: 62.4">
+        <span class="wunit">kg</span>
+        <button class="btn-primary" style="width:auto;padding:11px 18px;margin:0;" onclick="saveWeight()">저장</button>
+      </div>
+      <div class="hint" id="wHint" style="margin-top:8px;"></div>
+      <div class="stat-row" style="margin-top:12px;" id="wStats"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">체중 추이</h2>
+      <div class="chart-wrap">
+        <svg id="wChart" viewBox="0 0 340 190" width="100%" role="img" aria-label="체중 추이 선그래프"></svg>
+        <div class="tip" id="wTip"></div>
+      </div>
+      <div class="legend" style="margin-top:8px;padding-top:8px;">
+        <span class="item"><span class="dot" style="background:var(--text-muted)"></span>일별 실측</span>
+        <span class="item"><span class="dot" style="background:var(--s-kcal)"></span>7일 이동평균</span>
+      </div>
+      <div class="chart-caption">
+        체중은 수분·염분·장 내용물 때문에 하루에도 1~2kg 움직입니다. 매일의 숫자보다 <b>이동평균의 방향</b>을 보세요.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">섭취량 대비 실제 결과</h2>
+      <div id="tdeeBack"></div>
+    </section>
   </div>
 
   <!-- ============ TREND VIEW ============ -->
@@ -605,9 +740,50 @@
       <div class="hint" id="modelHint" style="margin-top:6px;"></div>
     </div>
 
+    <h4>내 신체 정보 (목표 자동 계산)</h4>
+    <div class="hint">
+      입력하면 Mifflin-St Jeor 공식으로 기초대사량(BMR)과 일일 소비 열량(TDEE)을 계산해 목표값을 제안합니다.
+      공식 자체에도 개인차가 ±10% 정도 있으므로, 2~3주 기록 후 실제 체중 변화를 보고 조정하는 것이 가장 정확합니다.
+    </div>
+    <div class="grid2">
+      <div class="field"><label>성별</label>
+        <select id="p-sex"><option value="female">여성</option><option value="male">남성</option></select>
+      </div>
+      <div class="field"><label>나이 (만)</label><input type="number" id="p-age" min="10" max="120"></div>
+      <div class="field"><label>키 (cm)</label><input type="number" id="p-height" step="0.1" min="100" max="230"></div>
+      <div class="field"><label>현재 체중 (kg)</label><input type="number" id="p-weight" step="0.1" min="20" max="300"></div>
+    </div>
+    <div class="field"><label>활동량</label>
+      <select id="p-activity">
+        <option value="1.2">거의 없음 — 앉아서 지내는 편</option>
+        <option value="1.375" selected>가벼움 — 주 1~3회 가벼운 운동</option>
+        <option value="1.55">보통 — 주 3~5회 운동</option>
+        <option value="1.725">활발 — 주 6~7회 운동</option>
+        <option value="1.9">매우 활발 — 육체노동 또는 하루 2회 운동</option>
+      </select>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>목표</label>
+        <select id="p-goal" onchange="onGoalChange()">
+          <option value="lose">체중 감량</option>
+          <option value="maintain">현재 체중 유지</option>
+          <option value="gain">체중 증량 / 근육량 증가</option>
+        </select>
+      </div>
+      <div class="field" id="paceField"><label>주당 감량 속도</label>
+        <select id="p-pace">
+          <option value="0.25">0.25 kg — 완만</option>
+          <option value="0.5" selected>0.5 kg — 표준</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-secondary" style="margin-top:0;" onclick="calcTargets()">계산해서 목표값 채우기</button>
+    <div class="calc-out" id="calcOut" style="display:none;"></div>
+
     <h4>일일 목표</h4>
     <div class="hint">
       기본값은 1일 2,000kcal 기준의 일반 성인 참고치입니다(한국인 영양소 섭취기준의 에너지적정비율 — 탄수화물 55~65%, 단백질 7~20%, 지방 15~30% 범위 내).
+      나트륨 2,000mg은 WHO 권고 상한이며, 한국인 영양소 섭취기준의 만성질환위험감소섭취량은 2,300mg입니다. <b>나트륨은 채우는 목표가 아니라 넘지 않아야 할 상한</b>으로 보세요.
       성별·연령·활동량·건강상태에 따라 실제 필요량은 달라지므로 필요시 조정하세요.
     </div>
     <div class="grid2">
@@ -616,11 +792,12 @@
       <div class="field"><label>단백질 (g)</label><input type="number" id="t-protein"></div>
       <div class="field"><label>지방 (g)</label><input type="number" id="t-fat"></div>
       <div class="field"><label>식이섬유 (g)</label><input type="number" id="t-fiber"></div>
+      <div class="field"><label>나트륨 상한 (mg)</label><input type="number" id="t-sodium"></div>
       <div class="field"><label>수분 (ml)</label><input type="number" id="t-water"></div>
     </div>
     <h4>데이터 백업 / 이전</h4>
     <div class="hint">
-      기록은 <b>이 브라우저 안에만</b> 저장됩니다. 다른 기기·다른 주소(파일로 열기 ↔ 웹 주소)로 옮기려면 아래로 내보낸 뒤 그쪽에서 가져오세요.
+      식사 기록·체중·신체 정보 모두 <b>이 브라우저 안에만</b> 저장됩니다. 다른 기기·다른 주소(파일로 열기 ↔ 웹 주소)로 옮기려면 아래로 내보낸 뒤 그쪽에서 가져오세요.
       브라우저의 "쿠키 및 사이트 데이터 삭제"를 하면 기록이 지워지므로 가끔 백업해두시길 권합니다.
       <b>API 키는 백업 파일에 포함되지 않습니다</b>(유출 방지) — 새 기기에서는 키만 다시 입력하시면 됩니다.
     </div>
@@ -638,6 +815,7 @@
 
 <footer class="tabbar">
   <button class="active" id="navToday" onclick="switchView('today')"><span class="ic">📅</span>오늘</button>
+  <button id="navBody" onclick="switchView('body')"><span class="ic">⚖️</span>체중</button>
   <button id="navTrend" onclick="switchView('trend')"><span class="ic">📈</span>추세</button>
   <button id="navHistory" onclick="switchView('history')"><span class="ic">🗂️</span>기록</button>
 </footer>
@@ -645,7 +823,7 @@
 <script>
 /* ---------------- Data layer ---------------- */
 const STORAGE_KEY = 'nutriTrackerData_v1';
-const DEFAULT_TARGETS = { kcal:2000, carb:300, protein:60, fat:60, fiber:25, water:2000 };
+const DEFAULT_TARGETS = { kcal:2000, carb:300, protein:60, fat:60, fiber:25, sodium:2000, water:2000 };
 const DEFAULT_MODEL = 'claude-sonnet-4-5';
 
 function loadData(){
@@ -663,49 +841,52 @@ if(!state.days) state.days = {};
 if(typeof state.apiKey !== 'string') state.apiKey = '';
 if(!state.model) state.model = DEFAULT_MODEL;
 if(!Array.isArray(state.favorites)) state.favorites = [];   // 기존 저장 데이터와의 호환
+if(state.targets.sodium == null) state.targets.sodium = DEFAULT_TARGETS.sodium;   // 나트륨 추가 이전 데이터 호환
+if(!state.weights || typeof state.weights !== 'object') state.weights = {};
+if(!state.profile || typeof state.profile !== 'object') state.profile = {};
 
 /* ---------------- Common food DB (1인분 기준 대표 추정치) ---------------- */
 const FOOD_DB = [
-  {name:"백미밥 1공기 (210g)", kcal:300, carb:66, protein:5, fat:0.5, fiber:0.5, water:130},
-  {name:"현미밥 1공기 (210g)", kcal:310, carb:65, protein:6, fat:2, fiber:3, water:125},
-  {name:"김치찌개 1인분", kcal:230, carb:10, protein:14, fat:14, fiber:2, water:280},
-  {name:"된장찌개 1인분", kcal:180, carb:12, protein:12, fat:8, fiber:3, water:280},
-  {name:"삼겹살 구이 100g", kcal:330, carb:0, protein:17, fat:29, fiber:0, water:45},
-  {name:"닭가슴살 100g (조리)", kcal:165, carb:0, protein:31, fat:3.6, fiber:0, water:65},
-  {name:"계란후라이 1개", kcal:90, carb:0.5, protein:6, fat:7, fiber:0, water:35},
-  {name:"삶은 계란 1개", kcal:78, carb:0.6, protein:6.3, fat:5.3, fiber:0, water:38},
-  {name:"두부 100g", kcal:80, carb:2, protein:8, fat:4.5, fiber:1, water:85},
-  {name:"김밥 1줄", kcal:400, carb:65, protein:11, fat:10, fiber:3, water:120},
-  {name:"라면 1개 (조리)", kcal:500, carb:78, protein:10, fat:16, fiber:2, water:450},
-  {name:"짜장면 1인분", kcal:700, carb:100, protein:18, fat:22, fiber:3, water:150},
-  {name:"김치볶음밥 1인분", kcal:550, carb:75, protein:12, fat:20, fiber:3, water:80},
-  {name:"불고기 100g", kcal:200, carb:8, protein:20, fat:9, fiber:0.5, water:60},
-  {name:"돈까스 1인분", kcal:650, carb:45, protein:28, fat:38, fiber:2, water:70},
-  {name:"샐러드(드레싱 포함) 1인분", kcal:180, carb:15, protein:4, fat:11, fiber:4, water:200},
-  {name:"바나나 1개", kcal:105, carb:27, protein:1.3, fat:0.4, fiber:3.1, water:88},
-  {name:"사과 1개", kcal:95, carb:25, protein:0.5, fat:0.3, fiber:4.4, water:150},
-  {name:"고구마 1개 (찐 것, 200g)", kcal:180, carb:41, protein:3, fat:0.2, fiber:6, water:130},
-  {name:"우유 1잔 (200ml)", kcal:130, carb:10, protein:6.8, fat:7.2, fiber:0, water:180},
-  {name:"두유 1팩 (190ml)", kcal:110, carb:9, protein:7, fat:5, fiber:1, water:170},
-  {name:"아메리카노 1잔 (355ml)", kcal:10, carb:1.5, protein:0.5, fat:0, fiber:0, water:350},
-  {name:"닭가슴살 샐러드 도시락", kcal:350, carb:25, protein:35, fat:10, fiber:6, water:220},
-  {name:"플레인 요거트 1컵 (150g)", kcal:100, carb:8, protein:9, fat:3, fiber:0, water:130},
-  {name:"그릭요거트 1컵 (150g)", kcal:130, carb:6, protein:15, fat:4, fiber:0, water:110},
-  {name:"오트밀 1공기 (조리, 250g)", kcal:150, carb:27, protein:5, fat:2.5, fiber:4, water:210},
-  {name:"아보카도 1/2개", kcal:120, carb:6, protein:1.5, fat:11, fiber:5, water:60},
-  {name:"콩나물국 1인분", kcal:60, carb:5, protein:5, fat:2, fiber:2, water:300},
-  {name:"미역국 1인분", kcal:80, carb:4, protein:6, fat:4, fiber:2, water:300},
-  {name:"제육볶음 1인분", kcal:450, carb:20, protein:28, fat:28, fiber:2, water:80},
-  {name:"떡볶이 1인분", kcal:480, carb:90, protein:8, fat:8, fiber:3, water:120},
-  {name:"순두부찌개 1인분", kcal:220, carb:10, protein:16, fat:12, fiber:2, water:300},
-  {name:"연어 스테이크 100g", kcal:210, carb:0, protein:22, fat:13, fiber:0, water:60},
-  {name:"고등어구이 1토막", kcal:220, carb:0, protein:20, fat:15, fiber:0, water:55},
-  {name:"비빔밥 1인분", kcal:480, carb:75, protein:14, fat:12, fiber:6, water:150},
-  {name:"프로틴쉐이크 1잔 (물, 30g 파우더)", kcal:120, carb:3, protein:24, fat:1.5, fiber:1, water:250},
-  {name:"아몬드 한 줌 (20g)", kcal:120, carb:4, protein:4.4, fat:10.5, fiber:2.4, water:1},
-  {name:"바게트빵 1조각 (50g)", kcal:135, carb:26, protein:5, fat:1, fiber:1.5, water:15},
-  {name:"치킨(후라이드) 3조각", kcal:600, carb:20, protein:40, fat:38, fiber:0.5, water:60},
-  {name:"물 1컵 (200ml)", kcal:0, carb:0, protein:0, fat:0, fiber:0, water:200}
+  {name:"백미밥 1공기 (210g)", kcal:300, carb:66, protein:5, fat:0.5, fiber:0.5, water:130, sodium:2},
+  {name:"현미밥 1공기 (210g)", kcal:310, carb:65, protein:6, fat:2, fiber:3, water:125, sodium:3},
+  {name:"김치찌개 1인분", kcal:230, carb:10, protein:14, fat:14, fiber:2, water:280, sodium:1200},
+  {name:"된장찌개 1인분", kcal:180, carb:12, protein:12, fat:8, fiber:3, water:280, sodium:1100},
+  {name:"삼겹살 구이 100g", kcal:330, carb:0, protein:17, fat:29, fiber:0, water:45, sodium:60},
+  {name:"닭가슴살 100g (조리)", kcal:165, carb:0, protein:31, fat:3.6, fiber:0, water:65, sodium:70},
+  {name:"계란후라이 1개", kcal:90, carb:0.5, protein:6, fat:7, fiber:0, water:35, sodium:95},
+  {name:"삶은 계란 1개", kcal:78, carb:0.6, protein:6.3, fat:5.3, fiber:0, water:38, sodium:62},
+  {name:"두부 100g", kcal:80, carb:2, protein:8, fat:4.5, fiber:1, water:85, sodium:10},
+  {name:"김밥 1줄", kcal:400, carb:65, protein:11, fat:10, fiber:3, water:120, sodium:700},
+  {name:"라면 1개 (조리)", kcal:500, carb:78, protein:10, fat:16, fiber:2, water:450, sodium:1700},
+  {name:"짜장면 1인분", kcal:700, carb:100, protein:18, fat:22, fiber:3, water:150, sodium:1300},
+  {name:"김치볶음밥 1인분", kcal:550, carb:75, protein:12, fat:20, fiber:3, water:80, sodium:1200},
+  {name:"불고기 100g", kcal:200, carb:8, protein:20, fat:9, fiber:0.5, water:60, sodium:500},
+  {name:"돈까스 1인분", kcal:650, carb:45, protein:28, fat:38, fiber:2, water:70, sodium:900},
+  {name:"샐러드(드레싱 포함) 1인분", kcal:180, carb:15, protein:4, fat:11, fiber:4, water:200, sodium:350},
+  {name:"바나나 1개", kcal:105, carb:27, protein:1.3, fat:0.4, fiber:3.1, water:88, sodium:1},
+  {name:"사과 1개", kcal:95, carb:25, protein:0.5, fat:0.3, fiber:4.4, water:150, sodium:2},
+  {name:"고구마 1개 (찐 것, 200g)", kcal:180, carb:41, protein:3, fat:0.2, fiber:6, water:130, sodium:20},
+  {name:"우유 1잔 (200ml)", kcal:130, carb:10, protein:6.8, fat:7.2, fiber:0, water:180, sodium:100},
+  {name:"두유 1팩 (190ml)", kcal:110, carb:9, protein:7, fat:5, fiber:1, water:170, sodium:90},
+  {name:"아메리카노 1잔 (355ml)", kcal:10, carb:1.5, protein:0.5, fat:0, fiber:0, water:350, sodium:10},
+  {name:"닭가슴살 샐러드 도시락", kcal:350, carb:25, protein:35, fat:10, fiber:6, water:220, sodium:350},
+  {name:"플레인 요거트 1컵 (150g)", kcal:100, carb:8, protein:9, fat:3, fiber:0, water:130, sodium:70},
+  {name:"그릭요거트 1컵 (150g)", kcal:130, carb:6, protein:15, fat:4, fiber:0, water:110, sodium:60},
+  {name:"오트밀 1공기 (조리, 250g)", kcal:150, carb:27, protein:5, fat:2.5, fiber:4, water:210, sodium:10},
+  {name:"아보카도 1/2개", kcal:120, carb:6, protein:1.5, fat:11, fiber:5, water:60, sodium:5},
+  {name:"콩나물국 1인분", kcal:60, carb:5, protein:5, fat:2, fiber:2, water:300, sodium:700},
+  {name:"미역국 1인분", kcal:80, carb:4, protein:6, fat:4, fiber:2, water:300, sodium:800},
+  {name:"제육볶음 1인분", kcal:450, carb:20, protein:28, fat:28, fiber:2, water:80, sodium:1100},
+  {name:"떡볶이 1인분", kcal:480, carb:90, protein:8, fat:8, fiber:3, water:120, sodium:1300},
+  {name:"순두부찌개 1인분", kcal:220, carb:10, protein:16, fat:12, fiber:2, water:300, sodium:1200},
+  {name:"연어 스테이크 100g", kcal:210, carb:0, protein:22, fat:13, fiber:0, water:60, sodium:350},
+  {name:"고등어구이 1토막", kcal:220, carb:0, protein:20, fat:15, fiber:0, water:55, sodium:400},
+  {name:"비빔밥 1인분", kcal:480, carb:75, protein:14, fat:12, fiber:6, water:150, sodium:900},
+  {name:"프로틴쉐이크 1잔 (물, 30g 파우더)", kcal:120, carb:3, protein:24, fat:1.5, fiber:1, water:250, sodium:150},
+  {name:"아몬드 한 줌 (20g)", kcal:120, carb:4, protein:4.4, fat:10.5, fiber:2.4, water:1, sodium:1},
+  {name:"바게트빵 1조각 (50g)", kcal:135, carb:26, protein:5, fat:1, fiber:1.5, water:15, sodium:300},
+  {name:"치킨(후라이드) 3조각", kcal:600, carb:20, protein:40, fat:38, fiber:0.5, water:60, sodium:900},
+  {name:"물 1컵 (200ml)", kcal:0, carb:0, protein:0, fat:0, fiber:0, water:200, sodium:0}
 ];
 
 /* ---------------- Helpers ---------------- */
@@ -731,10 +912,11 @@ let photoQueue = [];   // [{dataUrl, fileName, status:'pending'|'analyzing'|'don
 
 function getDayEntries(dateStr){ return state.days[dateStr] || []; }
 function computeTotals(dateStr){
-  const t = { kcal:0, carb:0, protein:0, fat:0, fiber:0, water:0 };
+  const t = { kcal:0, carb:0, protein:0, fat:0, fiber:0, sodium:0, water:0 };
   getDayEntries(dateStr).forEach(e=>{
     t.kcal += Number(e.kcal)||0; t.carb += Number(e.carb)||0; t.protein += Number(e.protein)||0;
-    t.fat += Number(e.fat)||0; t.fiber += Number(e.fiber)||0; t.water += Number(e.water)||0;
+    t.fat += Number(e.fat)||0; t.fiber += Number(e.fiber)||0;
+    t.sodium += Number(e.sodium)||0; t.water += Number(e.water)||0;
   });
   return t;
 }
@@ -763,13 +945,16 @@ function render(){
   setNutrientRow('protein', totals.protein, tg.protein, 'g');
   setNutrientRow('fat', totals.fat, tg.fat, 'g');
   setNutrientRow('fiber', totals.fiber, tg.fiber, 'g');
+  setNutrientRow('sodium', totals.sodium, tg.sodium, 'mg');
   setNutrientRow('water', totals.water, tg.water, 'ml');
 
   renderEntryList();
   renderHistory();
   renderFavorites();
   updateKeyNotice();
+  updateMealKeyNotice();
   if(document.getElementById('view-trend').classList.contains('active')) renderTrend();
+  if(document.getElementById('view-body').classList.contains('active')) renderBody();
 }
 
 function setNutrientRow(key, val, target, unit){
@@ -796,7 +981,7 @@ function renderEntryList(){
     <div class="entry">
       <div class="left">
         <span class="ename">${escapeHtml(e.name)} ${sourceBadge(e.source)}</span>
-        <span class="emeta">탄 ${round1(e.carb)}g · 단 ${round1(e.protein)}g · 지 ${round1(e.fat)}g · 식이섬유 ${round1(e.fiber)}g · 수분 ${round1(e.water)}ml</span>
+        <span class="emeta">탄 ${round1(e.carb)}g · 단 ${round1(e.protein)}g · 지 ${round1(e.fat)}g · 섬유 ${round1(e.fiber)}g · 나트륨 ${Math.round(num(e.sodium))}mg · 수분 ${round1(e.water)}ml</span>
       </div>
       <div class="eright">
         <span class="ekcal">${Math.round(e.kcal)} kcal</span>
@@ -838,14 +1023,16 @@ function goToday(){ currentDate = todayStr(); render(); }
 function jumpToDate(d){ currentDate = d; switchView('today'); render(); }
 
 function switchView(view){
-  ['today','trend','history'].forEach(v=>{
+  ['today','body','trend','history'].forEach(v=>{
     document.getElementById('view-'+v).classList.toggle('active', v===view);
   });
   document.getElementById('navToday').classList.toggle('active', view==='today');
+  document.getElementById('navBody').classList.toggle('active', view==='body');
   document.getElementById('navTrend').classList.toggle('active', view==='trend');
   document.getElementById('navHistory').classList.toggle('active', view==='history');
   if(view==='history') renderHistory();
   if(view==='trend') renderTrend();
+  if(view==='body') renderBody();
   window.scrollTo(0,0);
 }
 
@@ -884,7 +1071,7 @@ function addFavorite(food){
   }
   state.favorites.unshift({
     name: food.name, kcal: num(food.kcal), carb: num(food.carb), protein: num(food.protein),
-    fat: num(food.fat), fiber: num(food.fiber), water: num(food.water),
+    fat: num(food.fat), fiber: num(food.fiber), sodium: num(food.sodium), water: num(food.water),
     source: food.source || 'estimate'
   });
   if(state.favorites.length > 24) state.favorites.length = 24;   // 칩이 화면을 뒤덮지 않도록 상한
@@ -899,7 +1086,8 @@ function addSelectedToFavorites(){
   const ok = addFavorite({
     name: m === 1 ? selectedFood.name : `${selectedFood.name} x${m}`,
     kcal: selectedFood.kcal*m, carb: selectedFood.carb*m, protein: selectedFood.protein*m,
-    fat: selectedFood.fat*m, fiber: selectedFood.fiber*m, water: selectedFood.water*m
+    fat: selectedFood.fat*m, fiber: selectedFood.fiber*m,
+    sodium: num(selectedFood.sodium)*m, water: selectedFood.water*m
   });
   if(ok) showAiStatus('⭐ 즐겨찾기에 저장했습니다.', false);
 }
@@ -915,8 +1103,8 @@ function favoriteFromEntry(i){
 function quickAddFavorite(i){
   const f = (state.favorites || [])[i];
   if(!f) return;
-  addEntry({ name:f.name, kcal:f.kcal, carb:f.carb, protein:f.protein,
-             fat:f.fat, fiber:f.fiber, water:f.water, source:f.source || 'estimate' });
+  addEntry({ name:f.name, kcal:f.kcal, carb:f.carb, protein:f.protein, fat:f.fat,
+             fiber:f.fiber, sodium:num(f.sodium), water:f.water, source:f.source || 'estimate' });
 }
 
 function removeFavorite(i){
@@ -928,7 +1116,7 @@ function removeFavorite(i){
 function isFavorited(e){ return (state.favorites || []).some(f=>sameFood(f,e)); }
 
 function switchTab(tab){
-  ['photo','search','manual'].forEach(t=>{
+  ['meal','photo','search','manual'].forEach(t=>{
     document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)+'Btn').classList.toggle('active', t===tab);
     document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).style.display = (t===tab)?'block':'none';
   });
@@ -1045,11 +1233,12 @@ const VISION_PROMPT = `이미지를 분석해 "1회 섭취분"의 영양성분�
 3. water_ml(수분): 라벨에는 보통 없으므로 추정합니다.
    - 액상 제품: (총 내용량 mL) - (탄수화물+단백질+지방+식이섬유 g 합계) 로 근사.
    - 고형 음식: 해당 식품군의 일반적 수분 함량으로 추정.
-4. 값을 도저히 알 수 없으면 0 대신 null.
-5. 숫자는 단위 없이 숫자만. 반올림은 소수 첫째 자리까지.
+4. sodium_mg(나트륨)은 라벨에 있으면 그대로, 없으면 추정하세요. 한국 음식은 국·찌개·김치·장류·젓갈·무침에 나트륨이 많습니다.
+5. 값을 도저히 알 수 없으면 0 대신 null.
+6. 숫자는 단위 없이 숫자만. 반올림은 소수 첫째 자리까지.
 
 아래 스키마의 JSON 객체만 출력하세요. 설명 문장이나 마크다운 코드펜스는 넣지 마세요.
-{"name":"제품 또는 음식 이름(한국어)","serving":"기준량 설명(예: 1팩 190mL)","kcal":number,"carb_g":number,"protein_g":number,"fat_g":number,"fiber_g":number,"water_ml":number,"sodium_mg":number|null,"source":"label"|"estimate","confidence":"high"|"medium"|"low","note":"한국어 한 문장. 추정한 부분이나 주의점을 밝힐 것."}`;
+{"name":"제품 또는 음식 이름(한국어)","serving":"기준량 설명(예: 1팩 190mL)","kcal":number,"carb_g":number,"protein_g":number,"fat_g":number,"fiber_g":number,"sodium_mg":number,"water_ml":number,"source":"label"|"estimate","confidence":"high"|"medium"|"low","note":"한국어 한 문장. 추정한 부분이나 주의점을 밝힐 것."}`;
 
 async function callVisionAPI(b64, hint){
   const userText = VISION_PROMPT + (hint ? `\n\n사용자 추가 설명(반드시 반영): ${hint}` : '');
@@ -1155,7 +1344,7 @@ function renderResults(){
     const calc = num(r.carb_g)*4 + num(r.protein_g)*4 + num(r.fat_g)*9;
     const stated = num(r.kcal);
     const mismatch = stated > 0 && calc > 0 && Math.abs(calc - stated)/stated > 0.25;
-    const unknowns = [['탄수화물',r.carb_g],['단백질',r.protein_g],['지방',r.fat_g],['식이섬유',r.fiber_g],['수분',r.water_ml]]
+    const unknowns = [['탄수화물',r.carb_g],['단백질',r.protein_g],['지방',r.fat_g],['식이섬유',r.fiber_g],['나트륨',r.sodium_mg],['수분',r.water_ml]]
       .filter(([,v])=>isUnknown(v)).map(([k])=>k);
     return `<div class="rescard ${p.include?'':'excluded'}">
       <div class="rc-top">
@@ -1172,6 +1361,7 @@ function renderResults(){
         <div class="ritem"><span class="rk"><span class="dot" style="background:var(--s-protein)"></span>단백질</span><span class="rv">${showVal(r.protein_g,'g')}</span></div>
         <div class="ritem"><span class="rk"><span class="dot" style="background:var(--s-fat)"></span>지방</span><span class="rv">${showVal(r.fat_g,'g')}</span></div>
         <div class="ritem"><span class="rk"><span class="dot" style="background:var(--s-fiber)"></span>식이섬유</span><span class="rv">${showVal(r.fiber_g,'g')}</span></div>
+        <div class="ritem"><span class="rk"><span class="dot" style="background:var(--s-sodium)"></span>나트륨</span><span class="rv">${isUnknown(r.sodium_mg)?'—':Math.round(num(r.sodium_mg))+' mg'}</span></div>
         <div class="ritem"><span class="rk"><span class="dot" style="background:var(--s-water)"></span>수분</span><span class="rv">${showVal(r.water_ml,'ml')}</span></div>
       </div>
       <div class="rnote">${escapeHtml(r.note || '')}${unknowns.length ? `<br><span style="color:var(--warning);font-weight:600">— 표시(${unknowns.join(', ')})는 사진에서 확인되지 않아 0으로 반영됩니다.</span>`:''}</div>
@@ -1223,7 +1413,7 @@ function addAllSelected(){
     addEntry({
       name: r.name || '사진 기록',
       kcal: num(r.kcal), carb: num(r.carb_g), protein: num(r.protein_g),
-      fat: num(r.fat_g), fiber: num(r.fiber_g), water: num(r.water_ml),
+        fat: num(r.fat_g), fiber: num(r.fiber_g), sodium: num(r.sodium_mg), water: num(r.water_ml),
       source: r.source === 'label' ? 'label' : 'estimate'
     });
   });
@@ -1240,6 +1430,7 @@ function editResult(i){
   document.getElementById('m-protein').value = isUnknown(r.protein_g) ? '' : round1(r.protein_g);
   document.getElementById('m-fat').value = isUnknown(r.fat_g) ? '' : round1(r.fat_g);
   document.getElementById('m-fiber').value = isUnknown(r.fiber_g) ? '' : round1(r.fiber_g);
+  document.getElementById('m-sodium').value = isUnknown(r.sodium_mg) ? '' : Math.round(num(r.sodium_mg));
   document.getElementById('m-water').value = isUnknown(r.water_ml) ? '' : round1(r.water_ml);
   photoQueue[i].include = false;
   renderResults();
@@ -1322,12 +1513,13 @@ const TEXT_LOOKUP_PROMPT = `아래 음식의 일반적인 1인분 기준 영양�
 2. serving에는 어떤 양을 기준으로 계산했는지 반드시 밝히세요 (예: "1공기 210g", "1인분 약 400g", "톨 사이즈 355mL").
 3. 이것은 실측값이 아닌 추정값이므로 source는 항상 "estimate"입니다.
 4. water_ml(수분)은 해당 음식의 일반적 수분 함량으로 추정하세요.
+4-1. sodium_mg(나트륨)도 반드시 추정하세요. 한국 음식은 국·찌개·김치·젓갈·장류·무침에 나트륨이 많습니다(예: 찌개 1인분 1,000mg 이상, 라면 1개 1,500mg 이상). 간을 하지 않은 밥·과일·견과는 10mg 미만입니다.
 5. 브랜드/조리법에 따라 편차가 큰 음식이면 confidence를 "low"로 하고 note에 그 이유를 적으세요.
 6. 음식이 아니거나 무엇인지 알 수 없으면 {"error":"이유"} 만 출력하세요.
 7. 숫자는 단위 없이 숫자만, 소수 첫째 자리까지.
 
 아래 스키마의 JSON 객체만 출력하세요. 설명이나 코드펜스는 넣지 마세요.
-{"name":"음식 이름(한국어)","serving":"기준량 설명","kcal":number,"carb_g":number,"protein_g":number,"fat_g":number,"fiber_g":number,"water_ml":number,"source":"estimate","confidence":"high"|"medium"|"low","note":"한국어 한 문장. 추정 근거나 편차가 큰 이유."}
+{"name":"음식 이름(한국어)","serving":"기준량 설명","kcal":number,"carb_g":number,"protein_g":number,"fat_g":number,"fiber_g":number,"sodium_mg":number,"water_ml":number,"source":"estimate","confidence":"high"|"medium"|"low","note":"한국어 한 문장. 추정 근거나 편차가 큰 이유."}
 
 음식: `;
 
@@ -1387,7 +1579,7 @@ async function aiLookup(){
     selectedFood = {
       name: (r.name || name) + (r.serving ? ` (${r.serving})` : ''),
       kcal: num(r.kcal), carb: num(r.carb_g), protein: num(r.protein_g),
-      fat: num(r.fat_g), fiber: num(r.fiber_g), water: num(r.water_ml),
+      fat: num(r.fat_g), fiber: num(r.fiber_g), sodium: num(r.sodium_mg), water: num(r.water_ml),
       _ai: true, _note: r.note || '', _confidence: r.confidence || ''
     };
     document.getElementById('selectedFoodBox').style.display = 'block';
@@ -1426,7 +1618,7 @@ function updateSelectedPreview(){
   const mismatch = selectedFood.kcal > 0 && calc > 0 && Math.abs(calc - selectedFood.kcal)/selectedFood.kcal > 0.25;
   document.getElementById('selectedPreview').innerHTML =
     `${selectedFood._ai ? `<b>AI 추정값</b>${conf}<br>` : ''}` +
-    `${m}인분 기준 — 칼로리 ${Math.round(selectedFood.kcal*m)}kcal / 탄수화물 ${round1(selectedFood.carb*m)}g / 단백질 ${round1(selectedFood.protein*m)}g / 지방 ${round1(selectedFood.fat*m)}g / 식이섬유 ${round1(selectedFood.fiber*m)}g / 수분 ${round1(selectedFood.water*m)}ml` +
+    `${m}인분 기준 — 칼로리 ${Math.round(selectedFood.kcal*m)}kcal / 탄수화물 ${round1(selectedFood.carb*m)}g / 단백질 ${round1(selectedFood.protein*m)}g / 지방 ${round1(selectedFood.fat*m)}g / 식이섬유 ${round1(selectedFood.fiber*m)}g / 나트륨 ${Math.round(num(selectedFood.sodium)*m)}mg / 수분 ${round1(selectedFood.water*m)}ml` +
     (selectedFood._note ? `<br><span style="color:var(--text-muted)">${escapeHtml(selectedFood._note)}</span>` : '') +
     (mismatch ? `<br><span style="color:var(--critical);font-weight:600">⚠ 검산 불일치: 영양소로 계산하면 약 ${Math.round(calc*m)}kcal입니다. 값을 확인해보세요.</span>` : '');
 }
@@ -1437,7 +1629,8 @@ function addFromSearch(){
   addEntry({
     name: m === 1 ? selectedFood.name : `${selectedFood.name} x${m}`,
     kcal: selectedFood.kcal*m, carb: selectedFood.carb*m, protein: selectedFood.protein*m,
-    fat: selectedFood.fat*m, fiber: selectedFood.fiber*m, water: selectedFood.water*m,
+    fat: selectedFood.fat*m, fiber: selectedFood.fiber*m,
+    sodium: num(selectedFood.sodium)*m, water: selectedFood.water*m,
     source: 'estimate'
   });
   document.getElementById('searchInput').value='';
@@ -1465,6 +1658,7 @@ function parsePaste(){
     'm-protein': grab(['단백질','protein']),
     'm-fat': grab(['지방(?!산)','fat']),
     'm-fiber': grab(['식이섬유','fiber']),
+    'm-sodium': grab(['나트륨','sodium']),
     'm-water': grab(['수분','water'])
   };
   Object.entries(map).forEach(([id,v])=>{ if(v!==null) document.getElementById(id).value = v; });
@@ -1484,11 +1678,479 @@ function addManual(){
     protein: Number(document.getElementById('m-protein').value)||0,
     fat: Number(document.getElementById('m-fat').value)||0,
     fiber: Number(document.getElementById('m-fiber').value)||0,
+    sodium: Number(document.getElementById('m-sodium').value)||0,
     water: Number(document.getElementById('m-water').value)||0,
     source: 'manual'
   });
-  ['m-name','m-kcal','m-carb','m-protein','m-fat','m-fiber','m-water','pasteBox']
+  ['m-name','m-kcal','m-carb','m-protein','m-fat','m-fiber','m-sodium','m-water','pasteBox']
     .forEach(id=>{ document.getElementById(id).value=''; });
+}
+
+/* ---------------- Body profile & targets ---------------- */
+const KCAL_PER_KG = 7700;   // 체지방 1kg의 대략적 에너지 등가 (근사값)
+
+/* Mifflin-St Jeor: 현재 임상에서 가장 널리 쓰이는 기초대사량 추정식 */
+function calcBMR(sex, weightKg, heightCm, age){
+  const base = 10*weightKg + 6.25*heightCm - 5*age;
+  return sex === 'male' ? base + 5 : base - 161;
+}
+
+function readProfileForm(){
+  return {
+    sex: document.getElementById('p-sex').value,
+    age: Number(document.getElementById('p-age').value),
+    height: Number(document.getElementById('p-height').value),
+    weight: Number(document.getElementById('p-weight').value),
+    activity: Number(document.getElementById('p-activity').value),
+    goal: document.getElementById('p-goal').value,
+    pace: Number(document.getElementById('p-pace').value)
+  };
+}
+
+function onGoalChange(){
+  const goal = document.getElementById('p-goal').value;
+  const f = document.getElementById('paceField');
+  f.style.display = (goal === 'maintain') ? 'none' : 'block';
+  f.querySelector('label').textContent = goal === 'gain' ? '주당 증량 속도' : '주당 감량 속도';
+}
+
+function calcTargets(){
+  const p = readProfileForm();
+  const out = document.getElementById('calcOut');
+  if(!p.age || !p.height || !p.weight){
+    out.style.display='block';
+    out.innerHTML = '<div class="co-warn">나이·키·체중을 모두 입력해주세요.</div>';
+    return;
+  }
+
+  const bmr = calcBMR(p.sex, p.weight, p.height, p.age);
+  const tdee = bmr * p.activity;
+  const dailyDelta = (p.goal === 'maintain') ? 0
+    : (p.pace * KCAL_PER_KG / 7) * (p.goal === 'lose' ? -1 : 1);
+  let target = tdee + dailyDelta;
+
+  // 안전장치: 기초대사량 아래로는 목표를 내리지 않는다
+  let capped = false;
+  if(p.goal === 'lose' && target < bmr){ target = bmr; capped = true; }
+
+  // 단백질: 감량 시 근육 손실을 줄이기 위해 높게, 유지 시 일반 권장 수준
+  const proteinPerKg = p.goal === 'lose' ? 1.6 : (p.goal === 'gain' ? 1.8 : 1.2);
+  const protein = Math.round(p.weight * proteinPerKg);
+  const fat = Math.round(target * 0.25 / 9);                 // 총 열량의 25%를 지방으로
+  const carb = Math.round((target - protein*4 - fat*9) / 4);
+  const fiber = Math.round(target / 1000 * 12.5);            // 1,000kcal당 약 12.5g
+  const water = Math.round(p.weight * 32 / 50) * 50;         // 체중 1kg당 약 32ml
+  const sodium = 2000;
+
+  window._calcTargets = { kcal: Math.round(target/10)*10, carb, protein, fat, fiber, sodium, water };
+
+  out.style.display = 'block';
+  out.innerHTML = `
+    <div class="co-row"><span>기초대사량 (BMR)</span><span class="cv">${Math.round(bmr)} kcal</span></div>
+    <div class="co-row"><span>일일 소비 열량 (TDEE)</span><span class="cv">${Math.round(tdee)} kcal</span></div>
+    ${dailyDelta ? `<div class="co-row"><span>${p.goal==='lose'?'감량':'증량'}을 위한 조정</span><span class="cv">${dailyDelta>0?'+':''}${Math.round(dailyDelta)} kcal</span></div>` : ''}
+    <div class="co-main">권장 섭취 ${window._calcTargets.kcal} kcal</div>
+    <div class="co-row"><span>탄수화물</span><span class="cv">${carb} g</span></div>
+    <div class="co-row"><span>단백질</span><span class="cv">${protein} g (체중 1kg당 ${proteinPerKg}g)</span></div>
+    <div class="co-row"><span>지방</span><span class="cv">${fat} g</span></div>
+    <div class="co-row"><span>식이섬유</span><span class="cv">${fiber} g</span></div>
+    <div class="co-row"><span>수분</span><span class="cv">${water} ml</span></div>
+    <div class="co-row"><span>나트륨 상한</span><span class="cv">${sodium} mg</span></div>
+    ${capped ? `<div class="co-warn">⚠ 설정하신 속도로는 목표가 기초대사량 아래로 내려가서 ${Math.round(bmr)}kcal로 올렸습니다. 기초대사량 미만의 장기 섭취는 근육 손실과 대사 저하를 부를 수 있으니, 감량 속도를 0.25kg으로 늦추거나 활동량을 늘려 여유를 만드는 편이 낫습니다.</div>` : ''}
+    ${window._calcTargets.kcal < 1400 ? `<div class="co-warn">⚠ 계산된 목표가 ${window._calcTargets.kcal}kcal로 낮은 편입니다. 이 수준을 오래 유지하면 필수 영양소를 충분히 채우기 어렵습니다. 감량 속도를 늦추시거나, 이대로 진행하실 계획이면 의사·영양사와 한 번 상의해보시길 권합니다.</div>` : ''}
+    <div class="co-note">이 값은 통계적 추정입니다. 2~3주 기록 후 '체중' 탭의 실제 결과와 비교해 조정하세요.</div>
+    <button class="btn-primary" style="margin-top:10px;" onclick="applyCalcTargets()">이 값으로 목표 설정하기</button>`;
+}
+
+function applyCalcTargets(){
+  const t = window._calcTargets;
+  if(!t) return;
+  Object.entries(t).forEach(([k,v])=>{
+    const el = document.getElementById('t-'+k);
+    if(el) el.value = v;
+  });
+  document.getElementById('calcOut').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+/* ---------------- Weight log ---------------- */
+function saveWeight(){
+  const v = Number(document.getElementById('wInput').value);
+  if(!v || v < 20 || v > 300){
+    document.getElementById('wHint').innerHTML = '<span style="color:var(--critical)">20~300kg 범위의 숫자를 입력해주세요.</span>';
+    return;
+  }
+  state.weights[currentDate] = Math.round(v*10)/10;
+  // 프로필의 현재 체중도 최신값으로 맞춰둔다 (목표 재계산 시 사용)
+  state.profile.weight = state.weights[currentDate];
+  saveData();
+  renderBody();
+}
+
+function weightSeries(){
+  return Object.keys(state.weights).sort()
+    .map(k => ({ key:k, w: state.weights[k], d: new Date(k.slice(0,4), Number(k.slice(5,7))-1, k.slice(8,10)) }));
+}
+
+/* 후행 7일 이동평균 — 하루치 변동을 걷어내고 방향만 남긴다 */
+function movingAvg(series, windowDays){
+  return series.map((pt,i)=>{
+    const from = new Date(pt.d); from.setDate(from.getDate() - (windowDays-1));
+    const win = series.filter(p => p.d >= from && p.d <= pt.d);
+    return { ...pt, ma: win.reduce((s,p)=>s+p.w,0) / win.length, n: win.length };
+  });
+}
+
+function renderBody(){
+  const series = weightSeries();
+  const latest = series[series.length-1];
+  document.getElementById('wInput').value =
+    state.weights[currentDate] != null ? state.weights[currentDate] : '';
+  document.getElementById('wHint').textContent =
+    state.weights[currentDate] != null
+      ? `${fmtDateLabel(currentDate)} 기록됨 · 날짜는 '오늘' 탭에서 바꿀 수 있습니다`
+      : (latest ? `마지막 기록: ${fmtDateLabel(latest.key)} ${latest.w}kg` : '첫 체중을 기록해보세요');
+
+  const ma = movingAvg(series, 7);
+  const cur = ma[ma.length-1];
+  const first = ma[0];
+  const wk = ma.filter(p=>{
+    const cutoff = new Date(cur ? cur.d : new Date()); cutoff.setDate(cutoff.getDate()-7);
+    return p.d <= cutoff;
+  });
+  const weekAgo = wk[wk.length-1];
+
+  document.getElementById('wStats').innerHTML = !cur ? '' : `
+    <div class="stat">
+      <div class="sv">${cur.ma.toFixed(1)}<small> kg</small></div>
+      <div class="sl">7일 평균</div>
+    </div>
+    <div class="stat">
+      <div class="sv">${weekAgo ? (cur.ma-weekAgo.ma>=0?'+':'')+(cur.ma-weekAgo.ma).toFixed(1) : '—'}<small>${weekAgo?' kg':''}</small></div>
+      <div class="sl">최근 1주 변화</div>
+    </div>
+    <div class="stat">
+      <div class="sv">${first && series.length>1 ? (cur.ma-first.w>=0?'+':'')+(cur.ma-first.w).toFixed(1) : '—'}<small>${first&&series.length>1?' kg':''}</small></div>
+      <div class="sl">시작 대비</div>
+    </div>`;
+
+  drawWeightChart(ma);
+  renderBackCalc(ma);
+}
+
+function drawWeightChart(ma){
+  const svg = document.getElementById('wChart');
+  if(ma.length === 0){
+    svg.innerHTML = `<text x="170" y="95" text-anchor="middle" font-size="11" fill="${cssVar('--text-muted')}">체중을 기록하면 추이가 표시됩니다</text>`;
+    return;
+  }
+  const vals = ma.map(p=>p.w).concat(ma.map(p=>p.ma));
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if(hi - lo < 2){ const mid=(hi+lo)/2; lo = mid-1; hi = mid+1; }   // 변화가 작을 때 과장되지 않게 최소 범위 확보
+  const pad = (hi-lo)*0.15; lo -= pad; hi += pad;
+
+  const pw = CH.w - CH.l - CH.r, ph = CH.h - CH.t - CH.b;
+  const x = i => ma.length===1 ? CH.l+pw/2 : CH.l + (pw * i/(ma.length-1));
+  const y = v => CH.t + ph - ((v-lo)/(hi-lo))*ph;
+
+  let g = '';
+  for(let i=0;i<=4;i++){
+    const v = lo + (hi-lo)*i/4, yy = y(v);
+    g += `<line x1="${CH.l}" y1="${yy}" x2="${CH.w-CH.r}" y2="${yy}" stroke="${cssVar('--grid')}" stroke-width="1"/>`;
+    g += `<text x="${CH.l-6}" y="${yy+3.5}" text-anchor="end" font-size="9" fill="${cssVar('--text-muted')}">${v.toFixed(1)}</text>`;
+  }
+
+  const dots = ma.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.w)}" r="2.6" fill="${cssVar('--text-muted')}" opacity="0.75"/>`).join('');
+  const maLine = ma.length>1
+    ? `<polyline points="${ma.map((p,i)=>`${x(i)},${y(p.ma)}`).join(' ')}" fill="none" stroke="${cssVar('--s-kcal')}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`
+    : '';
+  const maDots = ma.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.ma)}" r="${ma.length<=14?3.2:0}" fill="${cssVar('--s-kcal')}" stroke="${cssVar('--surface-1')}" stroke-width="1.5"/>`).join('');
+
+  const step = ma.length<=7 ? 1 : Math.ceil(ma.length/6);
+  let xl = '';
+  ma.forEach((p,i)=>{
+    if(i % step !== 0 && i !== ma.length-1) return;
+    xl += `<text x="${x(i)}" y="${CH.h-CH.b+13}" text-anchor="middle" font-size="9" fill="${cssVar('--text-muted')}">${p.d.getMonth()+1}/${p.d.getDate()}</text>`;
+  });
+
+  const band = pw / Math.max(1, ma.length);
+  const hits = ma.map((p,i)=>`<rect class="hitrect" x="${x(i)-band/2}" y="${CH.t}" width="${band}" height="${ph}" data-i="${i}"/>`).join('');
+
+  svg.innerHTML = g + maLine + dots + maDots + xl + hits;
+
+  const tip = document.getElementById('wTip');
+  const wrap = svg.parentElement;
+  svg.querySelectorAll('.hitrect').forEach(rect=>{
+    const i = Number(rect.dataset.i);
+    const show = e => {
+      const p = ma[i];
+      tip.innerHTML = `<b>${p.d.getMonth()+1}/${p.d.getDate()}</b>실측 ${p.w.toFixed(1)}kg<br>7일 평균 ${p.ma.toFixed(1)}kg`;
+      tip.style.display='block';
+      const wr = wrap.getBoundingClientRect();
+      const cx = (e.touches ? e.touches[0].clientX : e.clientX);
+      tip.style.left = Math.max(2, Math.min(cx - wr.left + 10, wr.width - tip.offsetWidth - 2)) + 'px';
+      tip.style.top = '2px';
+    };
+    rect.addEventListener('mouseenter', show);
+    rect.addEventListener('mousemove', show);
+    rect.addEventListener('mouseleave', ()=>tip.style.display='none');
+    rect.addEventListener('touchstart', e=>{ show(e); e.preventDefault(); }, {passive:false});
+  });
+  svg.addEventListener('mouseleave', ()=>tip.style.display='none');
+}
+
+/* 기록한 섭취량과 실제 체중 변화를 대조해 '실제 소비 열량'을 역산한다.
+   칼로리 추정에 오차가 있어도, 결과(체중)와 맞춰보면 보정할 수 있다는 것이 이 화면의 핵심. */
+function renderBackCalc(ma){
+  const box = document.getElementById('tdeeBack');
+  const MIN_DAYS = 14;
+
+  if(ma.length < 2){
+    box.innerHTML = `<div class="empty">체중을 2회 이상 기록하면 분석이 시작됩니다.</div>`;
+    return;
+  }
+  const last = ma[ma.length-1], first = ma[0];
+  const spanDays = Math.round((last.d - first.d) / 86400000);
+
+  // 기간 내 '기록한 날'의 평균 섭취량
+  const intake = [];
+  for(let i=0;i<=spanDays;i++){
+    const d = new Date(first.d); d.setDate(d.getDate()+i);
+    const k = fmtDate(d);
+    if((state.days[k]||[]).length > 0) intake.push(computeTotals(k).kcal);
+  }
+  const avgIntake = intake.length ? intake.reduce((a,b)=>a+b,0)/intake.length : 0;
+  const dWeight = last.ma - first.w;
+  const coverage = spanDays > 0 ? Math.round(intake.length / (spanDays+1) * 100) : 0;
+
+  if(spanDays < MIN_DAYS || intake.length < 7){
+    box.innerHTML = `
+      <div class="back-card">
+        <div>지금까지 <b>${spanDays}일</b>간 체중 ${dWeight>=0?'+':''}${dWeight.toFixed(1)}kg, 식사 기록 <b>${intake.length}일</b>치가 모였습니다.</div>
+        <div class="bc-note">신뢰할 만한 분석에는 <b>체중 ${MIN_DAYS}일 이상, 식사 기록 7일 이상</b>이 필요합니다.
+        초기 체중 변화는 대부분 수분과 글리코겐이라 실제 체지방 변화를 반영하지 않습니다.</div>
+      </div>`;
+    return;
+  }
+
+  // 소비 = 섭취 + (감소한 체중의 에너지 등가)
+  const estTDEE = avgIntake - (dWeight * KCAL_PER_KG / spanDays);
+  const perWeek = dWeight / spanDays * 7;
+  const tg = state.targets.kcal;
+  const gap = estTDEE - tg;
+
+  box.innerHTML = `
+    <div class="back-card">
+      <div class="bc-main">실제 소비 열량 추정 약 ${Math.round(estTDEE/10)*10} kcal/일</div>
+      <div class="bc-row"><span>분석 기간</span><span class="v">${spanDays}일 (기록률 ${coverage}%)</span></div>
+      <div class="bc-row"><span>기록한 평균 섭취</span><span class="v">${Math.round(avgIntake)} kcal/일</span></div>
+      <div class="bc-row"><span>체중 변화</span><span class="v">${dWeight>=0?'+':''}${dWeight.toFixed(1)} kg (주당 ${perWeek>=0?'+':''}${perWeek.toFixed(2)}kg)</span></div>
+      <div class="bc-row"><span>현재 목표</span><span class="v">${tg} kcal/일</span></div>
+      <div class="bc-note">
+        ${Math.abs(gap) < 150
+          ? `현재 목표(${tg}kcal)가 추정 소비량과 비슷합니다. 이 목표를 유지하면 체중은 대체로 유지됩니다.`
+          : gap > 0
+            ? `추정 소비량이 목표보다 ${Math.round(gap)}kcal 높습니다. 지금 목표를 지키면 이론상 주당 약 ${(gap*7/KCAL_PER_KG).toFixed(2)}kg 감량 속도가 됩니다.`
+            : `추정 소비량이 목표보다 ${Math.round(-gap)}kcal 낮습니다. 목표를 ${Math.round(estTDEE/10)*10}kcal 근처로 조정하거나 활동량을 늘리는 편이 현실적입니다.`}
+        <br><br>이 역산은 기록하지 않은 식사가 없다고 가정합니다. 기록률이 낮으면 실제 섭취가 더 많았을 가능성이 크고, 그만큼 추정 소비량도 과대평가됩니다.
+      </div>
+    </div>`;
+}
+
+/* ---------------- Meal (free text) ---------------- */
+let mealItems = [];
+let mealMeta = null;
+
+const MEAL_PROMPT = `사용자가 먹은 식사를 자유롭게 적었습니다. 이를 음식 항목별로 분해하고 각 항목의 영양성분을 추정해 JSON으로만 답하세요.
+
+한국 가정식·외식 기준 환산 규칙:
+- 밥 1공기 = 약 210g (2/3공기 = 약 140g)
+- 국·찌개 1인분 = 약 300g (국물 포함)
+- 전·부침 1조각 = 약 25~35g, 부칠 때 흡수한 기름 3~5g을 반드시 포함
+- 나물·무침 1젓가락 = 약 5g
+- 쌈·잎채소 1장 = 약 3g
+- 고기 구이 1점 = 약 20~25g
+- 양을 명시하지 않은 반찬은 "보통 한 접시 분량 중 일반적으로 먹는 양"으로 추정
+
+주의할 점:
+- 진미채·멸치볶음·조림류는 물엿·설탕·기름이 많아 중량 대비 열량이 높습니다.
+- 전·튀김은 흡수 기름 때문에 재료만 계산하면 과소평가됩니다.
+- sodium_mg(나트륨)을 반드시 항목마다 추정하세요. 국·찌개 1인분은 800~1,500mg, 김치 한 젓가락은 100~200mg, 무침·조림은 200~500mg 수준이고, 간을 하지 않은 밥·과일·견과는 10mg 미만입니다.
+- 합계는 계산하지 마세요. 앱이 직접 더합니다. 항목별 값만 정확히 주세요.
+- 숫자는 단위 없이 숫자만.
+
+아래 스키마의 JSON만 출력하세요. 설명이나 코드펜스는 넣지 마세요.
+{"meal_name":"식사를 요약한 짧은 이름(예: 집밥 한 상)","items":[{"name":"음식 이름","amount":"환산한 양(예: 2/3공기 약 140g)","kcal":number,"carb_g":number,"protein_g":number,"fat_g":number,"fiber_g":number,"sodium_mg":number,"water_ml":number,"confidence":"high"|"medium"|"low"}],"note":"추정에서 오차가 클 수 있는 부분을 한국어 한두 문장으로"}
+
+먹은 것:
+`;
+
+function updateMealKeyNotice(){
+  const has = !!state.apiKey;
+  document.getElementById('mealNoKey').style.display = has ? 'none' : 'block';
+  document.getElementById('mealUI').style.display = has ? 'block' : 'none';
+}
+
+function showMealStatus(msg, isErr){
+  const el = document.getElementById('mealStatus');
+  el.innerHTML = msg;
+  el.className = 'status-line' + (isErr ? ' err' : '');
+  el.style.display = 'block';
+}
+function hideMealStatus(){ document.getElementById('mealStatus').style.display = 'none'; }
+
+async function calcMeal(){
+  const text = document.getElementById('mealText').value.trim();
+  if(!text){ showMealStatus('먹은 것을 먼저 적어주세요.', true); return; }
+  if(!state.apiKey){ showMealStatus('설정에서 API 키를 먼저 등록해주세요.', true); return; }
+
+  const btn = document.getElementById('mealCalcBtn');
+  btn.disabled = true;
+  showMealStatus('<span class="spinner"></span>항목별로 계산하는 중입니다…', false);
+  document.getElementById('mealResult').style.display = 'none';
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'content-type':'application/json',
+        'x-api-key': state.apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model: state.model || DEFAULT_MODEL,
+        max_tokens: 2048,
+        messages:[{ role:'user', content: MEAL_PROMPT + text }]
+      })
+    });
+    if(!res.ok){
+      let detail=''; try{ const j=await res.json(); detail=(j.error&&j.error.message)||''; }catch(e){}
+      if(res.status===401) throw new Error('API 키가 올바르지 않습니다.');
+      if(res.status===404) throw new Error(`모델 "${state.model}"을(를) 찾을 수 없습니다. 설정에서 다시 선택해주세요.`);
+      if(res.status===429) throw new Error('요청이 많아 잠시 제한되었습니다. 잠시 후 다시 시도해주세요.');
+      if(res.status===400 && /credit|balance/i.test(detail)) throw new Error('API 크레딧이 부족합니다.');
+      throw new Error(`API 오류 (${res.status}) ${detail}`);
+    }
+    const data = await res.json();
+    const out = (data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+    const parsed = extractJson(out);
+    if(!parsed || !Array.isArray(parsed.items) || parsed.items.length===0){
+      throw new Error('항목을 인식하지 못했습니다. 음식 이름과 양을 조금 더 구체적으로 적어보세요.');
+    }
+    mealMeta = { name: parsed.meal_name || '식사', note: parsed.note || '' };
+    mealItems = parsed.items.map(it => ({
+      name: it.name || '항목', amount: it.amount || '',
+      kcal: num(it.kcal), carb: num(it.carb_g), protein: num(it.protein_g),
+      fat: num(it.fat_g), fiber: num(it.fiber_g), sodium: num(it.sodium_mg), water: num(it.water_ml),
+      confidence: it.confidence || '', include: true
+    }));
+    renderMeal();
+    hideMealStatus();
+  }catch(err){
+    showMealStatus('⚠ ' + escapeHtml(friendlyError(err)), true);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+/* 합계는 모델 산술을 믿지 않고 앱이 직접 더한다 */
+function mealTotals(){
+  const t = { kcal:0, carb:0, protein:0, fat:0, fiber:0, sodium:0, water:0 };
+  mealItems.filter(i=>i.include).forEach(i=>{
+    t.kcal+=i.kcal; t.carb+=i.carb; t.protein+=i.protein; t.fat+=i.fat;
+    t.fiber+=i.fiber; t.sodium+=i.sodium; t.water+=i.water;
+  });
+  return t;
+}
+
+function renderMeal(){
+  if(mealItems.length === 0){ document.getElementById('mealResult').style.display='none'; return; }
+  document.getElementById('mealResult').style.display = 'block';
+  document.getElementById('mealTitle').textContent = `섭취량 요약 — ${mealMeta.name}`;
+
+  document.getElementById('mealItems').innerHTML = mealItems.map((it,i)=>`
+    <label class="meal-item ${it.include?'':'off'}">
+      <input type="checkbox" ${it.include?'checked':''} onchange="toggleMealItem(${i})">
+      <span class="mi-main">
+        <span class="mi-name">${escapeHtml(it.name)}</span>
+        <span class="mi-amt">${escapeHtml(it.amount)}${it.confidence==='low'?' · 편차 큼':''}</span>
+      </span>
+      <span class="mi-kcal">${Math.round(it.kcal)} kcal</span>
+    </label>`).join('');
+
+  const t = mealTotals();
+  const tg = state.targets;
+  const dot = c => `<span class="dot" style="background:var(${c})"></span>`;
+  document.getElementById('mealTotal').innerHTML = `
+    <div class="mt-head"><span class="mt-l">총 섭취량</span><span class="mt-v">${Math.round(t.kcal)} <small style="font-size:12px;color:var(--text-muted)">kcal</small></span></div>
+    <div class="mt-grid">
+      <div class="mt-row"><span class="k">${dot('--s-carb')}탄수화물</span><span class="v">${round1(t.carb)} g</span></div>
+      <div class="mt-row"><span class="k">${dot('--s-protein')}단백질</span><span class="v">${round1(t.protein)} g</span></div>
+      <div class="mt-row"><span class="k">${dot('--s-fat')}지방</span><span class="v">${round1(t.fat)} g</span></div>
+      <div class="mt-row"><span class="k">${dot('--s-fiber')}식이섬유</span><span class="v">${round1(t.fiber)} g</span></div>
+      <div class="mt-row"><span class="k">${dot('--s-sodium')}나트륨</span><span class="v">${Math.round(t.sodium)} mg</span></div>
+      <div class="mt-row"><span class="k">${dot('--s-water')}수분</span><span class="v">${Math.round(t.water)} ml</span></div>
+    </div>
+    ${saltFlag(t.sodium, tg.sodium)}`;
+
+  document.getElementById('mealNote').textContent = mealMeta.note || '';
+
+  // Atwater 검산 (탄4·단4·지9 kcal/g)
+  const calc = t.carb*4 + t.protein*4 + t.fat*9;
+  const warn = document.getElementById('mealWarn');
+  if(t.kcal>0 && calc>0 && Math.abs(calc-t.kcal)/t.kcal > 0.25){
+    warn.style.display='block';
+    warn.textContent = `⚠ 검산 불일치: 영양소로 계산하면 약 ${Math.round(calc)}kcal인데 항목 합계는 ${Math.round(t.kcal)}kcal입니다.`;
+  } else warn.style.display='none';
+}
+
+function saltFlag(sodium, limit){
+  const pctOf = limit>0 ? Math.round((sodium/limit)*100) : 0;
+  let cls, msg;
+  if(pctOf >= 70){ cls='high'; msg=`이 한 끼로 하루 나트륨 상한의 ${pctOf}%를 섭취합니다. 국물을 남기면 크게 줄일 수 있습니다.`; }
+  else if(pctOf >= 40){ cls='medium'; msg=`하루 나트륨 상한의 ${pctOf}% 수준입니다.`; }
+  else { cls='low'; msg=`하루 나트륨 상한의 ${pctOf}% 수준으로 낮은 편입니다.`; }
+  return `<div class="salt-flag ${cls}">🧂 ${msg}</div>`;
+}
+
+function toggleMealItem(i){ mealItems[i].include = !mealItems[i].include; renderMeal(); }
+function recalcMeal(){ renderMeal(); }
+
+function addMealToLog(){
+  const sel = mealItems.filter(i=>i.include);
+  if(sel.length === 0){ showMealStatus('선택된 항목이 없습니다.', true); return; }
+  if(document.getElementById('mealSplit').checked){
+    sel.forEach(i=>addEntry({
+      name: i.name + (i.amount ? ` (${i.amount})` : ''),
+      kcal:i.kcal, carb:i.carb, protein:i.protein, fat:i.fat,
+      fiber:i.fiber, sodium:i.sodium, water:i.water, source:'estimate'
+    }));
+  } else {
+    const t = mealTotals();
+    addEntry({
+      name: `${mealMeta.name} (${sel.length}가지)`,
+      kcal:t.kcal, carb:t.carb, protein:t.protein, fat:t.fat,
+      fiber:t.fiber, sodium:t.sodium, water:t.water, source:'estimate'
+    });
+  }
+  clearMeal();
+}
+
+function saveMealAsFavorite(){
+  const sel = mealItems.filter(i=>i.include);
+  if(sel.length === 0) return;
+  const t = mealTotals();
+  const ok = addFavorite({ name:`${mealMeta.name} (${sel.length}가지)`, kcal:t.kcal, carb:t.carb,
+    protein:t.protein, fat:t.fat, fiber:t.fiber, sodium:t.sodium, water:t.water });
+  if(ok) showMealStatus('⭐ 즐겨찾기에 저장했습니다.', false);
+}
+
+function clearMeal(){
+  mealItems = []; mealMeta = null;
+  document.getElementById('mealText').value = '';
+  document.getElementById('mealSplit').checked = false;
+  document.getElementById('mealResult').style.display = 'none';
+  hideMealStatus();
 }
 
 /* ---------------- Trend view ---------------- */
@@ -1702,7 +2364,8 @@ function renderAvgRows(avg, loggedCount){
   const tg = state.targets;
   const rows = [
     ['탄수화물','carb','--s-carb','g'], ['단백질','protein','--s-protein','g'],
-    ['지방','fat','--s-fat','g'], ['식이섬유','fiber','--s-fiber','g'], ['수분','water','--s-water','ml']
+    ['지방','fat','--s-fat','g'], ['식이섬유','fiber','--s-fiber','g'],
+    ['나트륨','sodium','--s-sodium','mg'], ['수분','water','--s-water','ml']
   ];
   if(loggedCount === 0){
     document.getElementById('avgRows').innerHTML = '<div class="empty">기록이 쌓이면 평균이 표시됩니다.</div>';
@@ -1730,11 +2393,12 @@ function renderTrendTable(days){
     <td>${d.logged ? round1(d.totals.protein) : '—'}</td>
     <td>${d.logged ? round1(d.totals.fat) : '—'}</td>
     <td>${d.logged ? round1(d.totals.fiber) : '—'}</td>
+    <td>${d.logged ? Math.round(d.totals.sodium) : '—'}</td>
     <td>${d.logged ? Math.round(d.totals.water) : '—'}</td>
   </tr>`).join('');
   document.getElementById('trendTable').innerHTML = `
     <table class="dtable">
-      <thead><tr><th>날짜</th><th>kcal</th><th>탄(g)</th><th>단(g)</th><th>지(g)</th><th>섬유(g)</th><th>수분(ml)</th></tr></thead>
+      <thead><tr><th>날짜</th><th>kcal</th><th>탄(g)</th><th>단(g)</th><th>지(g)</th><th>섬유(g)</th><th>나트륨(mg)</th><th>수분(ml)</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
 }
@@ -1761,6 +2425,16 @@ function openSettings(){
   document.getElementById('t-protein').value = state.targets.protein;
   document.getElementById('t-fat').value = state.targets.fat;
   document.getElementById('t-fiber').value = state.targets.fiber;
+  document.getElementById('t-sodium').value = state.targets.sodium;
+  const pr = state.profile || {};
+  if(pr.sex) document.getElementById('p-sex').value = pr.sex;
+  if(pr.age) document.getElementById('p-age').value = pr.age;
+  if(pr.height) document.getElementById('p-height').value = pr.height;
+  if(pr.weight) document.getElementById('p-weight').value = pr.weight;
+  if(pr.activity) document.getElementById('p-activity').value = pr.activity;
+  if(pr.goal) document.getElementById('p-goal').value = pr.goal;
+  if(pr.pace) document.getElementById('p-pace').value = pr.pace;
+  onGoalChange();
   document.getElementById('t-water').value = state.targets.water;
   const sel = document.getElementById('modelSelect');
   if(![...sel.options].some(o=>o.value === state.model)){
@@ -1817,7 +2491,9 @@ function exportData(){
     exportedAt: new Date().toISOString(),
     targets: state.targets,
     days: state.days,
-    favorites: state.favorites || []
+    favorites: state.favorites || [],
+    weights: state.weights || {},
+    profile: state.profile || {}
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -1861,6 +2537,8 @@ function importData(ev){
       if(state.favorites.length > 24) state.favorites.length = 24;
     }
     if(data.targets) state.targets = Object.assign({}, state.targets, data.targets);
+    if(data.weights && typeof data.weights === 'object') state.weights = Object.assign({}, data.weights, state.weights);
+    if(data.profile && typeof data.profile === 'object') state.profile = Object.assign({}, data.profile, state.profile);
 
     saveData();
     render();
@@ -1881,8 +2559,10 @@ function saveSettings(){
     protein: Number(document.getElementById('t-protein').value)||DEFAULT_TARGETS.protein,
     fat: Number(document.getElementById('t-fat').value)||DEFAULT_TARGETS.fat,
     fiber: Number(document.getElementById('t-fiber').value)||DEFAULT_TARGETS.fiber,
+    sodium: Number(document.getElementById('t-sodium').value)||DEFAULT_TARGETS.sodium,
     water: Number(document.getElementById('t-water').value)||DEFAULT_TARGETS.water,
   };
+  state.profile = readProfileForm();
   saveData();
   closeSettings();
   render();
